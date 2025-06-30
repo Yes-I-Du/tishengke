@@ -1,0 +1,42 @@
+mybatis-plus:
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: false
+    #仅在开发环境打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete #全局逻辑删除字段名
+      logic-delete-value: 1 #逻辑已删除值
+      logic-not-delete-value: 0 #逻辑未删除值
+#接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: tishengke接口文档
+    version: v1.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.tishengke.tishengkebackend.interfaces.controller
+## 对象存储配置（需要从腾讯云获取）
+#cos:
+#  client:
+#    host: https://xxxxxxxxxxxxxxxxxx.com
+#    secretId: xxxxxxxxxxxxxxxxxxxx
+#    secretKey: xxxxxxxxxxxxxxxxxxx
+#    region: ap-beijing
+#    bucket: xxxxxxxxxxxxxxxxxx
+#spring:
+#  #数据库配置
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://xxxxxxxxxxxxxxxx:xxxx/xxxxxxxx?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#    username: xxxx
+#    password: xxxxxxxxx
+#  redis:
+#    host: xxxxxxxx
+#    port: 6379
+#    password: xxxxx
+#    database: 0
