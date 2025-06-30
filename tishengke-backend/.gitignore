@@ -44,4 +44,5 @@ logs/
 
 # application.yml
 application-private.yml
+application-private.yml~
 
