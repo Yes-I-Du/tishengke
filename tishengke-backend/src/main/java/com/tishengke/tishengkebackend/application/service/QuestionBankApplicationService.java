@@ -4,18 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tishengke.tishengkebackend.domain.question.entity.QuestionBank;
 import com.tishengke.tishengkebackend.domain.user.entity.User;
-import com.tishengke.tishengkebackend.infrastructure.common.DeleteRequest;
-import com.tishengke.tishengkebackend.interfaces.dto.questionBank.QuestionBankAddRequest;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBank.QuestionBankQueryRequest;
 import com.tishengke.tishengkebackend.interfaces.vo.question.QuestionBankVO;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * @author Dmz Email:  *
  * @description 针对【questionBank(题目)】相关的数据库操作Service
- *
- * @author Dmz
- * Email:  *
  * @since 2025/06/29 23:47
  */
 public interface QuestionBankApplicationService {
@@ -24,25 +20,26 @@ public interface QuestionBankApplicationService {
      * 题库信息校验
      *
      * @param questionBank 题库信息
+     * @param addFlag      是否为添加操作
      */
-    void vaildQuestionBank(QuestionBank questionBank);
+    void vaildQuestionBank(QuestionBank questionBank, boolean addFlag);
 
     /**
      * 添加题库
      *
-     * @param questionBankAddRequest 题库信息
-     * @param request 请求
+     * @param questionBank 题库信息
+     * @param loginUser    当前登录用户
      * @return 题库Id
      */
-    long addQuestionBank(QuestionBankAddRequest questionBankAddRequest, HttpServletRequest request);
+    long addQuestionBank(QuestionBank questionBank, User loginUser);
 
     /**
      * 删除题库
      *
-     * @param deleteRequest 删除请求
-     * @return 删除结果
+     * @param questionBankId 题库Id
+     * @param loginUser      当前登录用户
      */
-    void deleteQuestionBank(DeleteRequest deleteRequest);
+    void deleteQuestionBank(long questionBankId, User loginUser);
 
     /**
      * 更新题库
@@ -64,7 +61,7 @@ public interface QuestionBankApplicationService {
      * 获取题库脱敏信息
      *
      * @param questionBank 题库信息
-     * @param request 请求
+     * @param request      请求
      * @return 题库脱敏信息
      */
     QuestionBankVO getQuestionBankVO(QuestionBank questionBank, HttpServletRequest request);
@@ -73,20 +70,20 @@ public interface QuestionBankApplicationService {
      * 根据Id获取题库脱敏信息
      *
      * @param questionBank 题库信息
-     * @param request 请求
+     * @param request      请求
      * @return 题库脱敏信息
      */
     QuestionBankVO getQuestionBankVOById(QuestionBank questionBank, HttpServletRequest request);
 
-
     /**
      * 获取某一页题库信息
      *
-     * @param questionBankPage  题库页
-     * @param queryWrapper 查询条件
+     * @param questionBankPage 题库页
+     * @param queryWrapper     查询条件
      * @return 题库页信息
      */
-    Page<QuestionBank> getQuestionBankPage(Page<QuestionBank> questionBankPage, QueryWrapper<QuestionBank> queryWrapper);
+    Page<QuestionBank> getQuestionBankPage(Page<QuestionBank> questionBankPage,
+        QueryWrapper<QuestionBank> queryWrapper);
 
     /**
      * 分页查询题库信息
@@ -96,20 +93,18 @@ public interface QuestionBankApplicationService {
      */
     Page<QuestionBankVO> getQuestionBankVOPage(Page<QuestionBank> questionBankPage, HttpServletRequest request);
 
-        /**
-         * 构造QueryWrapper对象生成Sql查询
-         *
-         * @param questionBankQueryRequest 题库信息查询对象
-         * @return QueryWrapper QueryWrapper对象
-         */
-        QueryWrapper<QuestionBank> getQueryWrapper(QuestionBankQueryRequest questionBankQueryRequest);
-
+    /**
+     * 构造QueryWrapper对象生成Sql查询
+     *
+     * @param questionBankQueryRequest tiku信息查询对象
+     * @return QueryWrapper QueryWrapper对象
+     */
+    QueryWrapper<QuestionBank> getQueryWrapper(QuestionBankQueryRequest questionBankQueryRequest);
     /**
      * 设置题库信息审核状态
      *
-     * @param questionBank   题库信息
-     * @param loginUser 当前登录用户
+     * @param questionBank 题库信息
+     * @param loginUser    当前登录用户
      */
     void setQuestionBankReviewStatus(QuestionBank questionBank, User loginUser);
-
 }

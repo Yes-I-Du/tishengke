@@ -1,5 +1,10 @@
 package com.tishengke.tishengkebackend.interfaces.vo.question;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tishengke.tishengkebackend.domain.question.entity.Question;
+import com.tishengke.tishengkebackend.domain.question.entity.QuestionBank;
+import com.tishengke.tishengkebackend.interfaces.vo.user.UserVO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,6 +16,9 @@ import java.util.List;
  */
 @Data
 public class QuestionVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * id
      */
@@ -51,7 +59,6 @@ public class QuestionVO implements Serializable {
      */
     private Date updateTime;
 
-
     /**
      * 浏览量
      */
@@ -72,5 +79,37 @@ public class QuestionVO implements Serializable {
      */
     private String source;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 创建用户信息
+     */
+    private UserVO user;
+
+    /**
+     * 题库里的题目列表（分页）
+     */
+    Page<QuestionVO> questionPage;
+
+    /**
+     * 封装类 -> 题库对象
+     */
+    public static Question voToQuestion(QuestionVO questionVO) {
+        if (questionVO == null) {
+            return null;
+        }
+        Question question = new Question();
+        BeanUtil.copyProperties(questionVO, question);
+        return question;
+    }
+
+    /**
+     * 题库对象 -> 封装类
+     */
+    public static QuestionVO QuestionToVo(Question question) {
+        if (question == null) {
+            return null;
+        }
+        QuestionVO questionVO = new QuestionVO();
+        BeanUtil.copyProperties(question, questionVO);
+        return questionVO;
+    }
 }

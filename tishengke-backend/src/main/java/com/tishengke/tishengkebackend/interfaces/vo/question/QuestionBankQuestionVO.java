@@ -1,5 +1,8 @@
 package com.tishengke.tishengkebackend.interfaces.vo.question;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.tishengke.tishengkebackend.domain.question.entity.Question;
+import com.tishengke.tishengkebackend.domain.question.entity.QuestionBankQuestion;
 import com.tishengke.tishengkebackend.interfaces.vo.user.UserVO;
 import lombok.Data;
 
@@ -12,6 +15,9 @@ import java.util.List;
  */
 @Data
 public class QuestionBankQuestionVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * id
      */
@@ -52,5 +58,27 @@ public class QuestionBankQuestionVO implements Serializable {
      */
     private UserVO user;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 封装类 -> 题库对象
+     */
+    public static QuestionBankQuestion voToQuestionBankQuestion(QuestionBankQuestionVO questionBankQuestionVO) {
+        if (questionBankQuestionVO == null) {
+            return null;
+        }
+        QuestionBankQuestion questionBankQuestion = new QuestionBankQuestion();
+        BeanUtil.copyProperties(questionBankQuestionVO, questionBankQuestion);
+        return questionBankQuestion;
+    }
+
+    /**
+     * 题库题目关系信息对象 -> 封装类
+     */
+    public static QuestionBankQuestionVO QuestionBankQuestionToVo(QuestionBankQuestion questionBankQuestion) {
+        if (questionBankQuestion == null) {
+            return null;
+        }
+        QuestionBankQuestionVO questionBankQuestionVO = new QuestionBankQuestionVO();
+        BeanUtil.copyProperties(questionBankQuestion, questionBankQuestionVO);
+        return questionBankQuestionVO;
+    }
 }

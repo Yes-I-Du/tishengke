@@ -1,5 +1,6 @@
 package com.tishengke.tishengkebackend.interfaces.dto.questionBank;
 
+import com.tishengke.tishengkebackend.infrastructure.common.PageRequest;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @since JDK17
  */
 @Data
-public class QuestionBankQueryRequest implements Serializable {
+public class QuestionBankQueryRequest extends PageRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -46,3 +46,9 @@ logs/
 application-private.yml
 application-private.yml~
 
+*.java~
+*.pom~
+*.xml~
+*.yml~
+
+

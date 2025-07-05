@@ -7,18 +7,13 @@ import com.tishengke.tishengkebackend.application.service.QuestionBankApplicatio
 import com.tishengke.tishengkebackend.application.service.UserApplicationService;
 import com.tishengke.tishengkebackend.domain.question.entity.QuestionBank;
 import com.tishengke.tishengkebackend.domain.question.service.QuestionBankDomainService;
-import com.tishengke.tishengkebackend.domain.question.service.impl.QuestionBankDomainServiceImpl;
 import com.tishengke.tishengkebackend.domain.user.entity.User;
-import com.tishengke.tishengkebackend.infrastructure.common.DeleteRequest;
 import com.tishengke.tishengkebackend.infrastructure.common.RespCode;
 import com.tishengke.tishengkebackend.infrastructure.exception.ThrowUtils;
-import com.tishengke.tishengkebackend.interfaces.dto.questionBank.QuestionBankAddRequest;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBank.QuestionBankQueryRequest;
 import com.tishengke.tishengkebackend.interfaces.vo.question.QuestionBankVO;
 import com.tishengke.tishengkebackend.interfaces.vo.user.UserVO;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Picture;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,10 +24,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @description 针对【questionBank(题目)】相关的数据库操作Service
+ * 针对【questionBank(题目)】相关的数据库操作Service
  *
- * @author Dmz
- * Email:  *
+ * @author Dmz Email:  *
  * @since 2025/06/29 23:47
  */
 @Service
@@ -46,37 +40,33 @@ public class QuestionBankApplicationServiceImpl implements QuestionBankApplicati
     private QuestionBankDomainService questionBankDomainService;
 
     @Override
-    public void vaildQuestionBank(QuestionBank questionBank) {
+    public void vaildQuestionBank(QuestionBank questionBank, boolean addFlag) {
         ThrowUtils.throwIf(questionBank == null, RespCode.PARAMS_ERROR, "题库信息不存在");
         // 题库信息校验
-        questionBank.vaildQuestionBank();
+        questionBank.vaildQuestionBank(addFlag);
     }
 
     @Override
-    public long addQuestionBank(QuestionBankAddRequest questionBankAddRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(questionBankAddRequest == null, RespCode.PARAMS_ERROR, "参数错误");
-        User loginUser = userApplicationService.getLoginUser(request);
-
-        // TODO:待实现
-        return questionBankDomainService.addQuestionBank(questionBankAddRequest,loginUser);
+    public long addQuestionBank(QuestionBank questionBank, User loginUser) {
+        questionBank.setUserId(loginUser.getId());
+        this.vaildQuestionBank(questionBank, true);
+        return questionBankDomainService.addQuestionBank(questionBank, loginUser);
     }
 
     @Override
-    public void deleteQuestionBank(DeleteRequest deleteRequest) {
-        // TODO:待实现
-        questionBankDomainService.addQuestionBank(deleteRequest);
+    public void deleteQuestionBank(long questionBankId, User loginUser) {
+        questionBankDomainService.deleteQuestionBank(questionBankId, loginUser);
     }
 
     @Override
     public void updateQuestionBank(QuestionBank questionBank) {
-        // TODO:待实现
+        this.vaildQuestionBank(questionBank, false);
         boolean result = questionBankDomainService.updateQuestionBankById(questionBank);
         ThrowUtils.throwIf(!result, RespCode.OPERATION_ERROR, "更新失败");
     }
 
     @Override
     public QuestionBank getQuestionBankById(Long questionBankId) {
-        // TODO:待实现
         QuestionBank questionBank = questionBankDomainService.getById(questionBankId);
         ThrowUtils.throwIf(questionBank == null, RespCode.NOT_FOUND_ERROR, "题库信息不存在");
         return questionBank;
@@ -106,47 +96,44 @@ public class QuestionBankApplicationServiceImpl implements QuestionBankApplicati
     @Override
     public Page<QuestionBank> getQuestionBankPage(Page<QuestionBank> questionBankPage,
         QueryWrapper<QuestionBank> queryWrapper) {
-        // TODO:待实现
-        return questionBankDomainService.page(questionBankPage, queryWrapper);;
+        return questionBankDomainService.page(questionBankPage, queryWrapper);
     }
 
     @Override
     public Page<QuestionBankVO> getQuestionBankVOPage(Page<QuestionBank> questionBankPage, HttpServletRequest request) {
         List<QuestionBank> questionBankList = questionBankPage.getRecords();
-        Page<QuestionBankVO> pictureVOPage =
+        Page<QuestionBankVO> questionBankVOPage =
             new Page<>(questionBankPage.getCurrent(), questionBankPage.getSize(), questionBankPage.getTotal());
         if (CollUtil.isEmpty(questionBankList)) {
-            return pictureVOPage;
+            return questionBankVOPage;
         }
         // 对象列表 => 封装对象列表
-        List<QuestionBankVO> pictureVOList = questionBankList.stream().map(QuestionBankVO::QuestionBankToVo).collect(Collectors.toList());
+        List<QuestionBankVO> questionBankVOList =
+            questionBankList.stream().map(QuestionBankVO::QuestionBankToVo).collect(Collectors.toList());
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionBankList.stream().map(QuestionBank::getUserId).collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap =
             userApplicationService.listByIds(userIdSet).stream().collect(Collectors.groupingBy(User::getId));
         // 2. 填充信息
-        pictureVOList.forEach(pictureVO -> {
-            Long userId = pictureVO.getUserId();
+        questionBankVOList.forEach(questionBankVO -> {
+            Long userId = questionBankVO.getUserId();
             User user = null;
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            pictureVO.setUser(userApplicationService.getUserVO(user));
+            questionBankVO.setUser(userApplicationService.getUserVO(user));
         });
-        pictureVOPage.setRecords(pictureVOList);
-        return pictureVOPage;
+        questionBankVOPage.setRecords(questionBankVOList);
+        return questionBankVOPage;
     }
 
     @Override
     public QueryWrapper<QuestionBank> getQueryWrapper(QuestionBankQueryRequest questionBankQueryRequest) {
-        // TODO:待实现
         return questionBankDomainService.getQueryWrapper(questionBankQueryRequest);
     }
 
     @Override
     public void setQuestionBankReviewStatus(QuestionBank questionBank, User loginUser) {
-        // TODO:待实现
         questionBankDomainService.setReviewStatus(questionBank, loginUser);
     }
 }
-

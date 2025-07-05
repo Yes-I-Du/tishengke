@@ -5,18 +5,34 @@
 <mapper namespace="com.tishengke.tishengkebackend.infrastructure.mapper.QuestionBankQuestionMapper">
 
     <resultMap id="BaseResultMap" type="com.tishengke.tishengkebackend.domain.question.entity.QuestionBankQuestion">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="questionBankId" column="questionBankId" jdbcType="BIGINT"/>
-            <result property="questionId" column="questionId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="questionOrder" column="questionOrder" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="questionBankId" column="questionBankId" jdbcType="BIGINT"/>
+        <result property="questionId" column="questionId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="questionOrder" column="questionOrder" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,questionBankId,questionId,
+        id
+        ,questionBankId,questionId,
         userId,createTime,updateTime,
         questionOrder
     </sql>
+
+    <!-- 查询题库关联的题目ID -->
+    <select id="selectQuestionIdsByBankId" resultType="java.lang.Long">
+        SELECT question_id
+        FROM question_bank_question
+        WHERE question_bank_id = #{bankId}
+    </select>
+
+    <!-- 查询题目被其他题库引用的次数（排除指定题库） -->
+    <select id="countReferencesExcludingBank" resultType="int">
+        SELECT COUNT(*)
+        FROM question_bank_question
+        WHERE question_id = #{questionId}
+          AND question_bank_id != #{excludeBankId}
+    </select>
 </mapper>
