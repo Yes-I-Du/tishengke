@@ -56,7 +56,7 @@ public class QuestionBankController {
      */
     @PostMapping("/add")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addQuestionBank(QuestionBankAddRequest questionBankAddRequest,
+    public BaseResponse<Long> addQuestionBank(@RequestBody QuestionBankAddRequest questionBankAddRequest,
         HttpServletRequest httpServletRequest) {
         // 请求参数
         ThrowUtils.throwIf(questionBankAddRequest == null, RespCode.PARAMS_ERROR, "请求失败");
@@ -73,7 +73,7 @@ public class QuestionBankController {
      */
     @PostMapping("/update")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateQuestionBank(QuestionBankUpdateRequest questionBankUpdateRequest) {
+    public BaseResponse<Boolean> updateQuestionBank(@RequestBody QuestionBankUpdateRequest questionBankUpdateRequest) {
         // 请求参数校验
         ThrowUtils.throwIf(questionBankUpdateRequest == null || questionBankUpdateRequest.getId() <= 0,
             RespCode.PARAMS_ERROR, "请求失败");

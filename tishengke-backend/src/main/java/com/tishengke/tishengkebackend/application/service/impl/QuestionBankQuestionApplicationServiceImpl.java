@@ -11,6 +11,7 @@ import com.tishengke.tishengkebackend.domain.user.entity.User;
 import com.tishengke.tishengkebackend.infrastructure.common.RespCode;
 import com.tishengke.tishengkebackend.infrastructure.exception.ThrowUtils;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionRemoveRequest;
 import com.tishengke.tishengkebackend.interfaces.vo.question.QuestionBankQuestionVO;
 import com.tishengke.tishengkebackend.interfaces.vo.user.UserVO;
 import lombok.extern.slf4j.Slf4j;
@@ -156,6 +157,11 @@ public class QuestionBankQuestionApplicationServiceImpl implements QuestionBankQ
     @Override
     public void batchAddQuestionsToBankInner(List<QuestionBankQuestion> questionBankQuestions) {
 
+    }
+
+    @Override
+    public void removeQuestionBankQuestion(QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest) {
+        questionBankQuestionDomainService.removeQuestionBankQuestion(questionBankQuestionRemoveRequest);
     }
 }
 

@@ -49,7 +49,7 @@ public class QuestionController {
      */
     @PostMapping("/add")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addQuestion(QuestionAddRequest questionAddRequest,
+    public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest,
         HttpServletRequest httpServletRequest) {
         // 请求参数
         ThrowUtils.throwIf(questionAddRequest == null, RespCode.PARAMS_ERROR, "请求失败");
@@ -71,7 +71,7 @@ public class QuestionController {
      */
     @PostMapping("/update")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateQuestion(QuestionUpdateRequest questionUpdateRequest) {
+    public BaseResponse<Boolean> updateQuestion(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
         // 请求参数校验
         ThrowUtils.throwIf(questionUpdateRequest == null || questionUpdateRequest.getId() <= 0, RespCode.PARAMS_ERROR,
             "请求失败");

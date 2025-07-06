@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tishengke.tishengkebackend.domain.question.entity.QuestionBankQuestion;
 import com.tishengke.tishengkebackend.domain.user.entity.User;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionRemoveRequest;
 import com.tishengke.tishengkebackend.interfaces.vo.question.QuestionBankQuestionVO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,4 +132,10 @@ public interface QuestionBankQuestionApplicationService {
      */
     @Transactional(rollbackFor = Exception.class)
     void batchAddQuestionsToBankInner(List<QuestionBankQuestion> questionBankQuestions);
+
+    /**
+     * 移除题库题目关联关系
+     * @param questionBankQuestionRemoveRequest
+     */
+    void removeQuestionBankQuestion(QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest);
 }

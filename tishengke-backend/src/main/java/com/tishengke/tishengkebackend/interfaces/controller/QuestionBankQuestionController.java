@@ -14,6 +14,7 @@ import com.tishengke.tishengkebackend.infrastructure.exception.ThrowUtils;
 import com.tishengke.tishengkebackend.interfaces.assembler.QuestionBankQuestionAssembler;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionAddRequest;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionRemoveRequest;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionUpdateRequest;
 import com.tishengke.tishengkebackend.interfaces.vo.question.QuestionBankQuestionVO;
 import com.tishengke.tishengkebackend.shared.auth.annotation.SaUserCheckRole;
@@ -47,7 +48,7 @@ public class QuestionBankQuestionController {
      */
     @PostMapping("/add")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addQuestionBankQuestion(QuestionBankQuestionAddRequest questionBankQuestionAddRequest,
+    public BaseResponse<Long> addQuestionBankQuestion(@RequestBody QuestionBankQuestionAddRequest questionBankQuestionAddRequest,
         HttpServletRequest httpServletRequest) {
         // 请求参数
         ThrowUtils.throwIf(questionBankQuestionAddRequest == null, RespCode.PARAMS_ERROR, "请求失败");
@@ -67,7 +68,7 @@ public class QuestionBankQuestionController {
     @PostMapping("/update")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateQuestionBankQuestion(
-        QuestionBankQuestionUpdateRequest questionBankQuestionUpdateRequest) {
+        @RequestBody QuestionBankQuestionUpdateRequest questionBankQuestionUpdateRequest) {
         // 请求参数校验
         ThrowUtils.throwIf(questionBankQuestionUpdateRequest == null || questionBankQuestionUpdateRequest.getId() <= 0,
             RespCode.PARAMS_ERROR, "请求失败");
@@ -88,7 +89,6 @@ public class QuestionBankQuestionController {
      * @return 删除结果
      */
     @PostMapping("/delete")
-    @SaUserCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestionBankQuestion(@RequestBody DeleteRequest deleteRequest,
         HttpServletRequest httpServletRequest) {
         // 请求参数校验
@@ -99,6 +99,27 @@ public class QuestionBankQuestionController {
 
         return ResultUtils.success(true);
     }
+
+    /**
+     * 移除题库题目关联关系
+     *
+     * @param questionBankQuestionRemoveRequest 题库题目关联信息删除请求
+     * @return 删除结果
+     */
+    @PostMapping("/remove")
+    @SaUserCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> removeQuestionBankQuestion(
+        @RequestBody QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest) {
+        // 请求参数校验
+        ThrowUtils.throwIf(
+            questionBankQuestionRemoveRequest == null || questionBankQuestionRemoveRequest.getQuestionId() <= 0 || questionBankQuestionRemoveRequest.getQuestionBankId() <= 0,
+            RespCode.PARAMS_ERROR, "请求参数失败");
+        // 移除题库题目关联关系
+        questionBankQuestionApplicationService.removeQuestionBankQuestion(questionBankQuestionRemoveRequest);
+
+        return ResultUtils.success(true);
+    }
+
     // endregion
 
     // region 查询
@@ -162,9 +183,8 @@ public class QuestionBankQuestionController {
      * @return 题库题目关联页信息
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<QuestionBankQuestionVO>> listQuestionBankVOByPage(
+    public BaseResponse<Page<QuestionBankQuestionVO>> listQuestionBankQuestionVOByPage(
         @RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest, HttpServletRequest request) {
-        long current = questionBankQuestionQueryRequest.getCurrent();
         long pageSize = questionBankQuestionQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(pageSize > 20, RespCode.PARAMS_ERROR);

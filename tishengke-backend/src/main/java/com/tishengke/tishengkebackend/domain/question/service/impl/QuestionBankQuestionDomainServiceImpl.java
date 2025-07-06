@@ -1,8 +1,10 @@
 package com.tishengke.tishengkebackend.domain.question.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tishengke.tishengkebackend.application.service.QuestionApplicationService;
 import com.tishengke.tishengkebackend.application.service.QuestionBankApplicationService;
@@ -15,6 +17,7 @@ import com.tishengke.tishengkebackend.infrastructure.common.RespCode;
 import com.tishengke.tishengkebackend.infrastructure.exception.ThrowUtils;
 import com.tishengke.tishengkebackend.infrastructure.repository.QuestionBankQuestionRepository;
 import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.tishengke.tishengkebackend.interfaces.dto.questionBankQuestion.QuestionBankQuestionRemoveRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -130,6 +133,24 @@ public class QuestionBankQuestionDomainServiceImpl implements QuestionBankQuesti
     @Override
     public void batchAddQuestionsToBankInner(List<QuestionBankQuestion> questionBankQuestions) {
 
+    }
+
+    @Override
+    public void removeQuestionBankQuestion(QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest) {
+        // 题库信息校验
+        QuestionBank questionBank =
+            questionBankApplicationService.getQuestionBankById(questionBankQuestionRemoveRequest.getQuestionBankId());
+        ThrowUtils.throwIf(questionBank == null, RespCode.NOT_FOUND_ERROR, "题库不存在");
+        // 题目信息校验
+        Question question = questionApplicationService.getQuestionById(questionBankQuestionRemoveRequest.getQuestionId());
+        ThrowUtils.throwIf(question == null, RespCode.NOT_FOUND_ERROR, "题目不存在");
+
+
+        // 构造查询
+        LambdaQueryWrapper<QuestionBankQuestion> lambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class)
+            .eq(QuestionBankQuestion::getQuestionBankId, questionBankQuestionRemoveRequest.getQuestionBankId())
+            .eq(QuestionBankQuestion::getQuestionId, questionBankQuestionRemoveRequest.getQuestionId());
+        ThrowUtils.throwIf(!questionBankQuestionRepository.remove(lambdaQueryWrapper), RespCode.OPERATION_ERROR, "删除失败");
     }
 }
 
