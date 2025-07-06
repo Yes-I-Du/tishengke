@@ -132,6 +132,14 @@ public interface UserApplicationService {
      * @param userQueryRequest 用户信息查询对象
      * @return 用户信息分页结果
      */
+    Page<User> listUserByPage(UserQueryRequest userQueryRequest);
+
+    /**
+     * 分页查询用户信息
+     *
+     * @param userQueryRequest 用户信息查询对象
+     * @return 用户信息分页结果
+     */
     Page<UserVO> listUserVOByPage(UserQueryRequest userQueryRequest);
 
     /**

@@ -43,7 +43,7 @@ public class UserController {
      * @return 新用户 id
      */
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<Long> userRegister(@RequestBody  UserRegisterRequest userRegisterRequest) {
         return ResultUtils.success(userApplicationService.userRegister(userRegisterRequest));
     }
 
@@ -54,7 +54,7 @@ public class UserController {
      * @return 脱敏后的用户信息
      */
     @PostMapping("/login")
-    public BaseResponse<LoginUserVO> userLogin(UserLoginRequest userLoginRequest,
+    public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest,
         HttpServletRequest httpServletRequest) {
         return ResultUtils.success(userApplicationService.userLogin(userLoginRequest, httpServletRequest));
     }
@@ -154,8 +154,21 @@ public class UserController {
      * @param userQueryRequest 用户信息
      * @return 用户信息
      */
-    @PostMapping("/list/page/vo")
+    @PostMapping("/list/page")
     @SaUserCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest) {
+        ThrowUtils.throwIf(userQueryRequest == null, RespCode.PARAMS_ERROR);
+        Page<User> userPage = userApplicationService.listUserByPage(userQueryRequest);
+        return ResultUtils.success(userPage);
+    }
+
+    /*
+     * 管理员权限
+     * 分页获取用户信息列表
+     * @param userQueryRequest 用户信息
+     * @return 用户信息
+     */
+    @PostMapping("/list/page/vo")
     public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest) {
         ThrowUtils.throwIf(userQueryRequest == null, RespCode.PARAMS_ERROR);
         Page<UserVO> userVOPage = userApplicationService.listUserVOByPage(userQueryRequest);

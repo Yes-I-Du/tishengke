@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  * @since JDK17
  */
 @Configuration
-@MapperScan("com.tishengke.tishengkebackend.infrastructure.mapper")
 public class MyBatisPlusConfig {
 
     /**

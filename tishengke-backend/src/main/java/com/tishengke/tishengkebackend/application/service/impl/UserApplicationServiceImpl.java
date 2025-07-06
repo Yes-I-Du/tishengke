@@ -130,12 +130,22 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     }
 
     @Override
-    public Page<UserVO> listUserVOByPage(UserQueryRequest userQueryRequest) {
-        ThrowUtils.throwIf(userQueryRequest == null, RespCode.PARAMS_ERROR);
+    public Page<User> listUserByPage(UserQueryRequest userQueryRequest) {
         long current = userQueryRequest.getCurrent();
         long pageSize = userQueryRequest.getPageSize();
+
         Page<User> userPage =
             userDomainService.page(new Page<>(current, pageSize), userDomainService.getQueryWrapper(userQueryRequest));
+        return userPage;
+    }
+
+    @Override
+    public Page<UserVO> listUserVOByPage(UserQueryRequest userQueryRequest) {
+        ThrowUtils.throwIf(userQueryRequest == null, RespCode.PARAMS_ERROR);
+        Page<User> userPage = this.listUserByPage(userQueryRequest);
+        long current = userQueryRequest.getCurrent();
+        long pageSize = userQueryRequest.getPageSize();
+
         Page<UserVO> userVOPage = new Page<>(current, pageSize, userPage.getTotal());
         List<UserVO> userVOList = userDomainService.getUserVOList(userPage.getRecords());
         userVOPage.setRecords(userVOList);
