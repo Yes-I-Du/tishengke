@@ -1,22 +1,4 @@
 declare namespace API {
-  type addQuestionBankQuestionUsingPOSTParams = {
-    questionBankId?: number;
-    questionId?: number;
-  };
-
-  type addQuestionBankUsingPOSTParams = {
-    description?: string;
-    picture?: string;
-    title?: string;
-  };
-
-  type addQuestionUsingPOSTParams = {
-    answer?: string;
-    content?: string;
-    tags?: string[];
-    title?: string;
-  };
-
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
@@ -268,6 +250,13 @@ declare namespace API {
     viewNum?: number;
   };
 
+  type QuestionAddRequest = {
+    answer?: string;
+    content?: string;
+    tags?: string[];
+    title?: string;
+  };
+
   type QuestionBank = {
     createTime?: string;
     description?: string;
@@ -284,6 +273,12 @@ declare namespace API {
     updateTime?: string;
     userId?: number;
     viewNum?: number;
+  };
+
+  type QuestionBankAddRequest = {
+    description?: string;
+    picture?: string;
+    title?: string;
   };
 
   type QuestionBankQueryRequest = {
@@ -311,6 +306,11 @@ declare namespace API {
     userId?: number;
   };
 
+  type QuestionBankQuestionAddRequest = {
+    questionBankId?: number;
+    questionId?: number;
+  };
+
   type QuestionBankQuestionQueryRequest = {
     current?: number;
     id?: number;
@@ -323,6 +323,17 @@ declare namespace API {
     userId?: number;
   };
 
+  type QuestionBankQuestionRemoveRequest = {
+    questionBankId?: number;
+    questionId?: number;
+  };
+
+  type QuestionBankQuestionUpdateRequest = {
+    id?: number;
+    questionBankId?: number;
+    questionId?: number;
+  };
+
   type QuestionBankQuestionVO = {
     createTime?: string;
     id?: number;
@@ -332,6 +343,13 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type QuestionBankUpdateRequest = {
+    description?: string;
+    id?: number;
+    picture?: string;
+    title?: string;
   };
 
   type QuestionBankVO = {
@@ -363,6 +381,14 @@ declare namespace API {
     userId?: number;
   };
 
+  type QuestionUpdateRequest = {
+    answer?: string;
+    content?: string;
+    id?: number;
+    tags?: string[];
+    title?: string;
+  };
+
   type QuestionVO = {
     answer?: string;
     content?: string;
@@ -378,27 +404,6 @@ declare namespace API {
     user?: UserVO;
     userId?: number;
     viewNum?: number;
-  };
-
-  type updateQuestionBankQuestionUsingPOSTParams = {
-    id?: number;
-    questionBankId?: number;
-    questionId?: number;
-  };
-
-  type updateQuestionBankUsingPOSTParams = {
-    description?: string;
-    id?: number;
-    picture?: string;
-    title?: string;
-  };
-
-  type updateQuestionUsingPOSTParams = {
-    answer?: string;
-    content?: string;
-    id?: number;
-    tags?: string[];
-    title?: string;
   };
 
   type User = {

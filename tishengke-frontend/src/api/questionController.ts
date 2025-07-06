@@ -4,15 +4,15 @@ import request from "@/libs/request";
 
 /** addQuestion POST /api/question/add */
 export async function addQuestionUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.addQuestionUsingPOSTParams,
+  body: API.QuestionAddRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseLong_>("/api/question/add", {
     method: "POST",
-    params: {
-      ...params,
+    headers: {
+      "Content-Type": "application/json",
     },
+    data: body,
     ...(options || {}),
   });
 }
@@ -96,15 +96,15 @@ export async function listQuestionVoByPageUsingPost(
 
 /** updateQuestion POST /api/question/update */
 export async function updateQuestionUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateQuestionUsingPOSTParams,
+  body: API.QuestionUpdateRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>("/api/question/update", {
     method: "POST",
-    params: {
-      ...params,
+    headers: {
+      "Content-Type": "application/json",
     },
+    data: body,
     ...(options || {}),
   });
 }

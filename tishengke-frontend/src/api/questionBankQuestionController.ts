@@ -4,15 +4,15 @@ import request from "@/libs/request";
 
 /** addQuestionBankQuestion POST /api/questionBankQuestion/add */
 export async function addQuestionBankQuestionUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.addQuestionBankQuestionUsingPOSTParams,
+  body: API.QuestionBankQuestionAddRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseLong_>("/api/questionBankQuestion/add", {
     method: "POST",
-    params: {
-      ...params,
+    headers: {
+      "Content-Type": "application/json",
     },
+    data: body,
     ...(options || {}),
   });
 }
@@ -85,8 +85,8 @@ export async function listQuestionBankQuestionByPageUsingPost(
   );
 }
 
-/** listQuestionBankVOByPage POST /api/questionBankQuestion/list/page/vo */
-export async function listQuestionBankVoByPageUsingPost1(
+/** listQuestionBankQuestionVOByPage POST /api/questionBankQuestion/list/page/vo */
+export async function listQuestionBankQuestionVoByPageUsingPost(
   body: API.QuestionBankQuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
@@ -103,17 +103,32 @@ export async function listQuestionBankVoByPageUsingPost1(
   );
 }
 
+/** removeQuestionBankQuestion POST /api/questionBankQuestion/remove */
+export async function removeQuestionBankQuestionUsingPost(
+  body: API.QuestionBankQuestionRemoveRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/remove", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** updateQuestionBankQuestion POST /api/questionBankQuestion/update */
 export async function updateQuestionBankQuestionUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateQuestionBankQuestionUsingPOSTParams,
+  body: API.QuestionBankQuestionUpdateRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/update", {
     method: "POST",
-    params: {
-      ...params,
+    headers: {
+      "Content-Type": "application/json",
     },
+    data: body,
     ...(options || {}),
   });
 }
