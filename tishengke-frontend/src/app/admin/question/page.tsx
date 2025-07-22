@@ -1,41 +1,43 @@
 "use client";
+
 import CreateModal from "./components/CreateModal";
 import UpdateModal from "./components/UpdateModal";
 import {
-  deleteQuestionBankUsingPost,
-  listQuestionBankByPageUsingPost,
-} from "@/api/questionBankController";
+  deleteQuestionUsingPost,
+  listQuestionByPageUsingPost,
+} from "@/api/questionController";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { Button, message, Space, Typography } from "antd";
 import React, { useRef, useState } from "react";
-import './index.css';
+import TagList from "@/components/TagList";
+import MdEditor from "@/components/MdEditor";
 
 /**
- * 题库管理页面
+ * 题目管理页面
  *
  * @constructor
  */
-const QuestionBankAdminPage: React.FC = () => {
+const QuestionAdminPage: React.FC = () => {
   // 是否显示新建窗口
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 是否显示更新窗口
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  // 当前题库点击的数据
-  const [currentRow, setCurrentRow] = useState<API.QuestionBank>();
+  // 当前点击的数据
+  const [currentRow, setCurrentRow] = useState<API.Question>();
 
   /**
    * 删除节点
    *
    * @param row
    */
-  const handleDelete = async (row: API.QuestionBank) => {
+  const handleDelete = async (row: API.Question) => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteQuestionBankUsingPost({
+      await deleteQuestionUsingPost({
         id: row.id as any,
       });
       hide();
@@ -52,7 +54,7 @@ const QuestionBankAdminPage: React.FC = () => {
   /**
    * 表格列配置
    */
-  const columns: ProColumns<API.QuestionBank>[] = [
+  const columns: ProColumns<API.Question>[] = [
     {
       title: "id",
       dataIndex: "id",
@@ -65,19 +67,64 @@ const QuestionBankAdminPage: React.FC = () => {
       valueType: "text",
     },
     {
-      title: "描述",
-      dataIndex: "description",
+      title: "内容",
+      dataIndex: "content",
       valueType: "text",
+      hideInSearch: true,
+      width: 240,
+      renderFormItem: (
+        _,
+        { type, defaultRender, formItemProps, fieldProps, ...rest },
+        form,
+      ) => {
+        return (
+          // value 和 onchange 会通过 form 自动注入。
+          <MdEditor
+            // 组件的配置
+            {...fieldProps}
+          />
+        );
+      },
     },
     {
-      title: "图片",
-      dataIndex: "picture",
-      valueType: "image",
-      fieldProps: {
-        width: 64,
-      },
+      title: "答案",
+      dataIndex: "answer",
+      valueType: "text",
       hideInSearch: true,
+      width: 640,
+      renderFormItem: (
+        _,
+        { type, defaultRender, formItemProps, fieldProps, ...rest },
+        form,
+      ) => {
+        return (
+          // value 和 onchange 会通过 form 自动注入。
+          <MdEditor
+            // 组件的配置
+            {...fieldProps}
+          />
+        );
+      },
     },
+    {
+      title: "标签",
+      dataIndex: "tags",
+      valueType: "select",
+      fieldProps: {
+        mode: "tags",
+      },
+      render: (_, record) => {
+        const tagList = JSON.parse(record.tags || "[]");
+        return <TagList tagList={tagList} />;
+      },
+    },
+    {
+      title: "创建用户",
+      dataIndex: "userId",
+      valueType: "text",
+      hideInForm: true,
+    },
+
     {
       title: "创建时间",
       sorter: true,
@@ -126,13 +173,9 @@ const QuestionBankAdminPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.QuestionBank>
-        headerTitle={"查询表格"}
+      <ProTable<API.Question>
+        headerTitle={"题目管理"}
         actionRef={actionRef}
-        rowKey="key"
-        search={{
-          labelWidth: 120,
-        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -146,19 +189,19 @@ const QuestionBankAdminPage: React.FC = () => {
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortOrder = sort?.[sortField];
 
-          const { data, code } = await listQuestionBankByPageUsingPost({
+          const { data, code } = await listQuestionByPageUsingPost({
             ...params,
             sortField,
             sortOrder,
             ...filter,
-          } as API.QuestionBankQueryRequest);
+          } as API.QuestionQueryRequest);
 
           return {
             success: code === 0,
-            data: data?.records || [],
-            total: Number(data?.total) || 0,
+            data: data.records || [],
+            total: Number(data.total) || 0,
           };
         }}
         columns={columns}
@@ -190,4 +233,4 @@ const QuestionBankAdminPage: React.FC = () => {
     </PageContainer>
   );
 };
-export default QuestionBankAdminPage;
+export default QuestionAdminPage;

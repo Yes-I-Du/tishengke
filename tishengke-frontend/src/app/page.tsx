@@ -23,7 +23,7 @@ export default async function HomePage() {
     });
     questionBankList = res.data.records ?? [];
   } catch (e) {
-    message.error("获取题库列表失败，" + e.message);
+    message.error("获取题库列表失败，" + (e as Error).message);
   }
 
   try {
@@ -33,8 +33,10 @@ export default async function HomePage() {
       sortOrder: "descend",
     });
     questionList = res.data.records ?? [];
+    console.log("----------------tag----------------")
+    console.log(questionList)
   } catch (e) {
-    message.error("获取题目列表失败，" + e.message);
+    message.error("获取题目列表失败，" + (e as Error).message);
   }
 
   return (

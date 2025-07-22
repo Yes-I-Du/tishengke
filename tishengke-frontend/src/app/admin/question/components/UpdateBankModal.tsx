@@ -49,7 +49,7 @@ const UpdateBankModal: React.FC<Props> = (props) => {
   // 获取题库列表
   const getQuestionBankList = async () => {
     // 题库数量不多，直接全量获取
-    const pageSize = 20;
+    const pageSize = 200;
 
     try {
       const res = await listQuestionBankVoByPageUsingPost({

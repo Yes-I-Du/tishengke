@@ -11,7 +11,7 @@ interface Props {
  * @constructor
  */
 const TagList = (props: Props) => {
-  const { tagList = [] } = props;
+  const tagList = props.tagList ?? [];
 
   return (
     <div className="tag-list">

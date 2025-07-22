@@ -156,8 +156,8 @@ const QuestionBankAdminPage: React.FC = () => {
           } as API.QuestionBankQueryRequest);
 
           // 正确解构响应数据
-          const apiResponse = response.data as API.BaseResponsePageQuestionBank_;
-          const pageData = apiResponse.data;
+          const apiResponse = response as API.BaseResponsePageQuestionBank_;
+          const pageData = apiResponse?.data;
 
           return {
             success: apiResponse.code === 0,
