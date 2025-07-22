@@ -1,6 +1,7 @@
 package com.tishengke.tishengkebackend.interfaces.vo.question;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tishengke.tishengkebackend.domain.question.entity.Question;
 import com.tishengke.tishengkebackend.domain.question.entity.QuestionBank;
@@ -98,6 +99,8 @@ public class QuestionVO implements Serializable {
         }
         Question question = new Question();
         BeanUtil.copyProperties(questionVO, question);
+        List<String> tagList = questionVO.getTagList();
+        question.setTags(JSONUtil.toJsonStr(tagList));
         return question;
     }
 
@@ -110,6 +113,7 @@ public class QuestionVO implements Serializable {
         }
         QuestionVO questionVO = new QuestionVO();
         BeanUtil.copyProperties(question, questionVO);
+        questionVO.setTagList(JSONUtil.toList(JSONUtil.parseArray(question.getTags()), String.class));
         return questionVO;
     }
 }
