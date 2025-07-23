@@ -1,4 +1,4 @@
-"use client";
+"use server";
 import Title from "antd/es/typography/Title";
 import { message } from "antd";
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
@@ -12,7 +12,7 @@ import "./index.css";
 export default async function BanksPage() {
   let questionBankList = [];
   // 题库数量不多，直接全量获取
-  const pageSize = 200;
+  const pageSize = 20;
   try {
     const res = await listQuestionBankVoByPageUsingPost({
       pageSize,

@@ -190,6 +190,7 @@ public class QuestionBankController {
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(
         @RequestBody QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
+        System.out.println("--------------listQuestionBankVOByPage START------------");
         long current = questionBankQueryRequest.getCurrent();
         long pageSize = questionBankQueryRequest.getPageSize();
         // 限制爬虫
@@ -200,6 +201,7 @@ public class QuestionBankController {
             questionBankApplicationService.getQuestionBankPage(new Page<>(current, pageSize),
                 questionBankApplicationService.getQueryWrapper(questionBankQueryRequest));
 
+        System.out.println("questionBankVOPage = " + questionBankPage);
         // 获取封装类
         return ResultUtils.success(questionBankApplicationService.getQuestionBankVOPage(questionBankPage, request));
     }

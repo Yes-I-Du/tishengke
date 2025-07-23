@@ -124,6 +124,7 @@ public class QuestionBankApplicationServiceImpl implements QuestionBankApplicati
             questionBankVO.setUser(userApplicationService.getUserVO(user));
         });
         questionBankVOPage.setRecords(questionBankVOList);
+        System.out.println("questionBankVOPage = " + questionBankVOPage);
         return questionBankVOPage;
     }
 
